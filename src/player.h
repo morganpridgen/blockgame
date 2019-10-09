@@ -1,6 +1,10 @@
 #ifndef playerh
 #define playerh
+
+class Player;
+
 #include <TEXEL/texel.h>
+#include "level.h"
 
 class Player {
   private:
@@ -8,7 +12,7 @@ class Player {
     float lJX, lJY;
   public:
     bool init();
-    void update(TXL_Controller& );
+    void update(TXL_Controller&, Level&);
     void render();
     void end();
     
