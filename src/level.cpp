@@ -28,6 +28,8 @@ Level::Level() {
   memset(levelName, 0, sizeof(levelName));
   memset(gems, 0, sizeof(gems));
   for (int i = 0; i < 64; i++) gems[i].room = -1;
+  gemCount = 0;
+  gemTarget = 0;
 }
 
 bool Level::init(const char *name, Player &ply, int lNum) {
@@ -47,6 +49,10 @@ bool Level::init(const char *name, Player &ply, int lNum) {
   } else {
     TXL_File f;
     char path[256];
+    sprintf(path, "%s/%s/targetGems.txt", TXL_DataPath("levels"), name);
+    if (!f.init(path, 'r')) return 0;
+    gemTarget = nextInt(&f);
+    f.close();
     sprintf(path, "%s/%s/%i.txt", TXL_DataPath("levels"), name, lNum);
     if (!f.init(path, 'r')) return 0;
     lW = nextInt(&f), lH = nextInt(&f);
@@ -99,6 +105,7 @@ void Level::update(Player &ply) {
             break;
           }
         }
+        gemCount++;
       }
       if (tiles[i]->boxDir() != -1) {
         int nX = i % lW, nY = i / lW;
@@ -111,7 +118,10 @@ void Level::update(Player &ply) {
         delete tiles[nY * lW + nX];
         tiles[nY * lW + nX] = newBox;
       }
-      if (!newTile->init()) continue;
+      if (!newTile->init()) {
+        delete newTile;
+        continue;
+      }
       tiles[i]->end();
       delete tiles[i];
       tiles[i] = newTile;
@@ -126,6 +136,12 @@ void Level::update(Player &ply) {
 
 void Level::render() {
   for (int i = 0; i < lW * lH; i++) tiles[i]->render(i % lW, i / lW);
+  char labelText[32];
+  sprintf(labelText, "Gems: %i/%i", gemCount, gemTarget);
+  TXL_Texture *label = TXL_RenderText(labelText, 1.0f, 1.0f, 1.0f);
+  label->render(16 + label->width() / 2, 16 + label->height() / 2 + 16 * lH);
+  label->free();
+  delete label;
 }
 
 void Level::end() {

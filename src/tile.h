@@ -3,11 +3,13 @@
 
 class Tile;
 
+#include <TEXEL/texel.h>
 #include "player.h"
 #include "level.h"
 
 class Tile {
-  private:
+  protected:
+    TXL_Texture tex;
   public:
     virtual bool init() {return 1;}
     virtual Tile *update(int tX, int tY, Player &ply, Level &lvl) {return nullptr;}

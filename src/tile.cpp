@@ -3,6 +3,7 @@
 #include "player.h"
 
 bool FloorTile::init() {
+  if (!tex.load(TXL_DataPath("floor.png"))) return 0;
   return 1;
 }
 
@@ -11,17 +12,19 @@ Tile *FloorTile::update(int tX, int tY, Player &ply, Level &lvl) {
 }
 
 void FloorTile::render(int tX, int tY) {
-  TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 16, 16, {0.25f, 0.25f, 0.25f, 1.0f});
-  TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 14, 14, {0.5f, 0.5f, 0.5f, 1.0f});
+  /*TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 16, 16, {0.25f, 0.25f, 0.25f, 1.0f});
+  TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 14, 14, {0.5f, 0.5f, 0.5f, 1.0f});*/
+  tex.render(tX * 16 + 8, tY * 16 + 8);
 }
 
 void FloorTile::end() {
-
+  tex.free();
 }
 
 
 
 bool WallTile::init() {
+  if (!tex.load(TXL_DataPath("wall.png"))) return 0;
   return 1;
 }
 
@@ -30,12 +33,13 @@ Tile *WallTile::update(int tX, int tY, Player &ply, Level &lvl) {
 }
 
 void WallTile::render(int tX, int tY) {
-  TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 16, 16, {0.25f, 0.25f, 0.25f, 1.0f});
-  TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 14, 14, {0.0f, 0.0f, 0.0f, 1.0f});
+  /*TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 16, 16, {0.25f, 0.25f, 0.25f, 1.0f});
+  TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 14, 14, {0.0f, 0.0f, 0.0f, 1.0f});*/
+  tex.render(tX * 16 + 8, tY * 16 + 8);
 }
 
 void WallTile::end() {
-
+  tex.free();
 }
 
 
