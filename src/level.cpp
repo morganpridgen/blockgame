@@ -1,4 +1,5 @@
 #include "level.h"
+#include <cstring>
 #include <TEXEL/texel.h>
 #include "tile.h"
 #include "player.h"
@@ -21,7 +22,16 @@ int nextInt(TXL_File *f) {
   }
 }
 
+Level::Level() {
+  tiles = nullptr;
+  lW = 0, lH = 0, room = -1;
+  memset(levelName, 0, sizeof(levelName));
+  memset(gems, 0, sizeof(gems));
+  for (int i = 0; i < 64; i++) gems[i].room = -1;
+}
+
 bool Level::init(const char *name, Player &ply, int lNum) {
+  room = lNum;
   strcpy(levelName, name);
   if (!name) {
     lW = 16, lH = 16;
@@ -55,8 +65,16 @@ bool Level::init(const char *name, Player &ply, int lNum) {
           }
         }
       }
+      if (id == 3) {
+        for (int j = 0; j < 64; j++) {
+          if (gems[j].room == lNum && gems[j].pos == i) {
+            id = 0;
+            break;
+          }
+        }
+      }
       tiles[i] = getTileId(id);
-      if (!tiles || !tiles[i]->init()) return 0;
+      if (!tiles[i] || !tiles[i]->init()) return 0;
     }
     for (int i = 0; i < 8; i++) {
       if (portals[i] != -1) {
@@ -71,8 +89,29 @@ bool Level::init(const char *name, Player &ply, int lNum) {
 void Level::update(Player &ply) {
   int portalActive = -1;
   for (int i = 0; i < lW * lH; i++) {
-    Tile *newTile = tiles[i]->update(i % lW, i / lW, ply);
+    Tile *newTile = tiles[i]->update(i % lW, i / lW, ply, *this);
     if (newTile) {
+      if (tiles[i]->isGem()) {
+        for (int j = 0; j < 64; j++) {
+          if (gems[j].room == -1) {
+            gems[j].room = room;
+            gems[j].pos = i;
+            break;
+          }
+        }
+      }
+      if (tiles[i]->boxDir() != -1) {
+        int nX = i % lW, nY = i / lW;
+        if (tiles[i]->boxDir() == 0) nX += 1;
+        if (tiles[i]->boxDir() == 1) nY += 1;
+        if (tiles[i]->boxDir() == 2) nX -= 1;
+        if (tiles[i]->boxDir() == 3) nY -= 1;
+        Tile *newBox = new BoxTile;
+        if (!newBox->init()) continue;
+        delete tiles[nY * lW + nX];
+        tiles[nY * lW + nX] = newBox;
+      }
+      if (!newTile->init()) continue;
       tiles[i]->end();
       delete tiles[i];
       tiles[i] = newTile;

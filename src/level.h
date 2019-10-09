@@ -8,10 +8,16 @@ class Level;
 
 class Level {
   private:
+    struct Gem {
+      int room;
+      int pos;
+    };
     Tile **tiles;
-    int lW, lH;
+    int lW, lH, room;
     char levelName[32];
+    Gem gems[64];
   public:
+    Level();
     bool init(const char*, Player&, int);
     void update(Player&);
     void render();

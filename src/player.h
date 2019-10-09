@@ -8,7 +8,7 @@ class Player;
 
 class Player {
   private:
-    int x, y;
+    int x, y, lX, lY;
     float lJX, lJY;
   public:
     bool init();
@@ -18,6 +18,7 @@ class Player {
     
     void getPos(int &nX, int &nY) {nX = x, nY = y;}
     void setPos(int nX, int nY) {x = nX, y = nY;}
+    void getLPos(int &nX, int &nY) {nX = lX, nY = lY;}
 };
 
 #endif

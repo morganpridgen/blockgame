@@ -7,6 +7,7 @@ bool Player::init() {
 }
 
 void Player::update(TXL_Controller &ctrl, Level &lvl) {
+  lX = x, lY = y;
   if (lJX < 64 && ctrl.leftJoyX() >= 64 && !lvl.tileAt(x + 1, y)->isSolid()) x += 1;
   if (lJX > -64 && ctrl.leftJoyX() <= -64 && !lvl.tileAt(x - 1, y)->isSolid()) x -= 1;
   if (lJY < 64 && ctrl.leftJoyY() >= 64 && !lvl.tileAt(x, y + 1)->isSolid()) y += 1;
