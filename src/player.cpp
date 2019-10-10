@@ -5,6 +5,7 @@ bool Player::init() {
   x = 1, y = 1;
   lJX = 0, lJY = 0;
   mTU = 0, mTD = 0, mTL = 0, mTR = 0;
+  return 1;
 }
 
 void Player::update(TXL_Controller &ctrl, Level &lvl) {

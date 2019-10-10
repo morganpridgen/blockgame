@@ -1,6 +1,9 @@
 #include "tile.h"
+#include <cstdlib>
+#include <cmath>
 #include <TEXEL/texel.h>
 #include "player.h"
+#include "particles.h"
 
 bool FloorTile::init() {
   return 1;
@@ -60,6 +63,10 @@ Tile *PortalTile::update(int tX, int tY, Player &ply, Level &lvl) {
     TXL_PlaySound(teleport);
     active = 1;
   }
+  if (animTimer % 4 == 0) {
+    ParticleInfo info = {tX * 16 + (rand() % 16), tY * 16 + (rand() % 16), 0, 0, 1.0f, 30, 1.0f, 0.0f, 1.0f};
+    addParticle(info);
+  }
   return nullptr;
 }
 
@@ -93,6 +100,14 @@ Tile *GemTile::update(int tX, int tY, Player &ply, Level &lvl) {
     TXL_Square pling = {3520, 1.0f, 2.0f, 1};
     TXL_PlaySound(pling);
     return new FloorTile;
+  }
+  if (animTimer % 8 == 0 && ((animTimer / 8) + tX + tY) % 8 == 5) {
+    ParticleInfo info = {tX * 16 + 4, tY * 16 + 4, 0, 0, 1, 15, 0.75f, 0.5f, 0.0f};
+    for (int i = 0; i < 8; i++) {
+      info.xV = cos(float(i) * (6.28f / 8.0f));
+      info.yV = sin(float(i) * (6.28f / 8.0f));
+      addParticle(info);
+    }
   }
   return nullptr;
 }
