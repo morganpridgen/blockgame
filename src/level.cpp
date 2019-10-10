@@ -1,8 +1,10 @@
 #include "level.h"
 #include <cstring>
+#include <cstdlib>
 #include <TEXEL/texel.h>
 #include "tile.h"
 #include "player.h"
+#include "particles.h"
 
 TXL_Texture floorTex, wallTex, portalTex, gemTex, boxTex;
 
@@ -32,6 +34,7 @@ Level::Level() {
   for (int i = 0; i < 64; i++) gems[i].room = -1;
   gemCount = 0;
   gemTarget = 0;
+  eActiveFade = 0;
 }
 
 bool Level::init(const char *name, Player &ply, int lNum) {
@@ -41,6 +44,7 @@ bool Level::init(const char *name, Player &ply, int lNum) {
   if (!gemTex.load(TXL_DataPath("gem.png"), 64, 16)) return 0;
   if (!boxTex.load(TXL_DataPath("box.png"), 16, 16)) return 0;
 
+  eX = -1, eY = -1;
   room = lNum;
   strcpy(levelName, name);
   if (!name) {
@@ -86,6 +90,10 @@ bool Level::init(const char *name, Player &ply, int lNum) {
             break;
           }
         }
+      }
+      if (id == 5) {
+        eX = i % lW, eY = i / lW;
+        id = 0;
       }
       tiles[i] = getTileId(id);
       if (!tiles[i] || !tiles[i]->init()) return 0;
@@ -136,6 +144,15 @@ void Level::update(Player &ply) {
     }
     if (tiles[i]->portalActive() != -1) portalActive = tiles[i]->portalActive();
   }
+  if (gemCount >= gemTarget && eActiveFade < 64) eActiveFade++;
+  if (eX > -1 && eY > -1) {
+    for (int i = 0; i < 4 * (float(gemCount) / float(gemTarget)); i++) {
+      float d = float(rand()) / (float(RAND_MAX) / 24.0f), r = float(rand()) / (float(RAND_MAX) / 6.28f);
+      ParticleInfo info = {eX * 16 + 8 + d * cos(r), eY * 16 + 8 + d * sin(r), 0, 0, 2.0f, 15, 1.0f, 0.0f, 1.0f};
+      addParticle(info);
+    }
+  }
+  
   if (portalActive != -1) {
     end();
     init(levelName, ply, portalActive);
@@ -144,6 +161,7 @@ void Level::update(Player &ply) {
 
 void Level::render() {
   for (int i = 0; i < lW * lH; i++) tiles[i]->render(i % lW, i / lW);
+  if (eActiveFade) TXL_RenderQuad({0, 0, lW * 16, lH * 16}, {1.0f, 0.0f, 1.0f, float(eActiveFade) / 1024.0f});
   char labelText[32];
   sprintf(labelText, ": %i/%i", gemCount, gemTarget);
   TXL_Texture *label = TXL_RenderText(labelText, 1.0f, 1.0f, 1.0f * (gemCount < gemTarget));

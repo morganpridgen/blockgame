@@ -17,6 +17,8 @@ class Level {
     char levelName[32];
     Gem gems[64];
     int gemCount, gemTarget;
+    int eActiveFade;
+    int eX, eY;
   public:
     Level();
     bool init(const char*, Player&, int);
