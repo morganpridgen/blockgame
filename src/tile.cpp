@@ -45,6 +45,7 @@ void WallTile::end() {
 
 
 bool PortalTile::init() {
+  animTimer = 0;
   pDest = -1;
   active = 0;
   return 1;
@@ -80,6 +81,7 @@ void PortalTile::end() {
 
 
 bool GemTile::init() {
+  animTimer = 0;
   return 1;
 }
 
