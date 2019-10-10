@@ -9,25 +9,25 @@ bool Player::init() {
 
 void Player::update(TXL_Controller &ctrl, Level &lvl) {
   lX = x, lY = y;
-  if (ctrl.leftJoyX() >= 64 && !lvl.tileAt(x + 1, y)->isSolid()) {
+  if (ctrl.leftJoyX() >= 0.5f && !lvl.tileAt(x + 1, y)->isSolid()) {
     if (mTR == 0) {
       x += 1;
       mTR = 15;
     } else mTR--;
   } else mTR = 0;
-  if (ctrl.leftJoyX() <= -64 && !lvl.tileAt(x - 1, y)->isSolid()) {
+  if (ctrl.leftJoyX() <= -0.5f && !lvl.tileAt(x - 1, y)->isSolid()) {
     if (mTL == 0) {
       x -= 1;
       mTL = 15;
     } else mTL--;
   } else mTL = 0;
-  if (ctrl.leftJoyY() >= 64 && !lvl.tileAt(x, y + 1)->isSolid()) {
+  if (ctrl.leftJoyY() >= 0.5f && !lvl.tileAt(x, y + 1)->isSolid()) {
     if (mTD == 0) {
       y += 1;
       mTD = 15;
     } else mTD--;
   } else mTD = 0;
-  if (ctrl.leftJoyY() <= -64 && !lvl.tileAt(x, y - 1)->isSolid()) {
+  if (ctrl.leftJoyY() <= -0.5f && !lvl.tileAt(x, y - 1)->isSolid()) {
     if (mTU == 0) {
       y -= 1;
       mTU = 15;

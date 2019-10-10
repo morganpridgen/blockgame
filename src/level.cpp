@@ -145,11 +145,14 @@ void Level::update(Player &ply) {
 void Level::render() {
   for (int i = 0; i < lW * lH; i++) tiles[i]->render(i % lW, i / lW);
   char labelText[32];
-  sprintf(labelText, "Gems: %i/%i", gemCount, gemTarget);
+  sprintf(labelText, ": %i/%i", gemCount, gemTarget);
   TXL_Texture *label = TXL_RenderText(labelText, 1.0f, 1.0f, 1.0f);
-  label->render(16 + label->width() / 2, 16 + label->height() / 2 + 16 * lH);
+  label->render(48 + label->width() / 2, 16 + label->height() / 2 + 16 * lH);
   label->free();
   delete label;
+  gemTex.setColorMod(1.0f);
+  gemTex.setClip(0, 16, 0, 16);
+  gemTex.render(48 - gemTex.width() / 2, 16 + gemTex.height() / 2 + 16 * lH, 2.0f, 2.0f);
 }
 
 void Level::end() {
