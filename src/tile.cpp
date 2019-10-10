@@ -133,7 +133,7 @@ Tile *BoxTile::update(int tX, int tY, Player &ply, Level &lvl) {
       if (pX - pLX == -1) bDir = 2;
       if (pY - pLY == 1) bDir = 1;
       if (pY - pLY == -1) bDir = 3;
-      TXL_Noise push = {1.0f, 2.0f, 0, 16, 1};
+      TXL_Noise push = {1.0f, 3.0f, 0, 16, 1};
       TXL_PlaySound(push);
     }
     ply.setPos(pX, pY);
