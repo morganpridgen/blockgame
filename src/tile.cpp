@@ -15,9 +15,9 @@ Tile *FloorTile::update(int tX, int tY, Player &ply, Level &lvl) {
 
 void FloorTile::render(int tX, int tY) {
   floorTex.render(tX * 16 + 8, tY * 16 + 8);
-  if (tSolid) TXL_RenderQuad({tX * 16, tY * 16, 16, 4}, {0.0f, 0.0f, 0.0f, 0.5f});
+  if (tSolid) TXL_RenderQuad({tX * 16 + 4, tY * 16, 12, 4}, {0.0f, 0.0f, 0.0f, 0.5f});
   if (lSolid) TXL_RenderQuad({tX * 16, tY * 16 + 4, 4, 12}, {0.0f, 0.0f, 0.0f, 0.5f});
-  if (!tSolid && tLSolid) TXL_RenderQuad({tX * 16, tY * 16, 4, 4}, {0.0f, 0.0f, 0.0f, 0.5f});
+  if (tLSolid) TXL_RenderQuad({tX * 16, tY * 16, 4, 4}, {0.0f, 0.0f, 0.0f, 0.5f});
 }
 
 void FloorTile::end() {
@@ -67,10 +67,10 @@ void PortalTile::render(int tX, int tY) {
   FloorTile::render(tX, tY);
   /*TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 8, 8, {1.0f, 0.0f, 1.0f, 1.0f});
   TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 6, 6, {0.5f, 0.0f, 0.5f, 1.0f});*/
-  int offset = (animTimer / 8) % 4;
+  int offset = ((animTimer / 8) + tX + tY) % 4;
   portalTex.setClip(offset * 16, (offset + 1) * 16, 0, 16);
   portalTex.setColorMod(0.95f);
-  portalTex.render(tX * 16 + 8, tY * 16 + 8);
+  portalTex.render(tX * 16 + 8, tY * 16 + 8, ((animTimer / 4) % 4) * 90);
   animTimer++;
 }
 
@@ -101,7 +101,7 @@ void GemTile::render(int tX, int tY) {
   FloorTile::render(tX, tY);
   /*TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 8, 8, {1.0f, 0.0f, 0.0f, 1.0f});
   TXL_RenderQuad(tX * 16 + 8, tY * 16 + 8, 6, 6, {0.5f, 0.0f, 0.0f, 1.0f});*/
-  int offset = (animTimer % 64 < 32) ? 0 : (animTimer / 8) % 4;
+  int offset = (((animTimer / 8) + tX + tY) % 8 < 4) ? 0 : ((animTimer / 8) + tX + tY) % 4;
   gemTex.setClip(offset * 16, (offset + 1) * 16, 0, 16);
   gemTex.setColorMod(0.95f);
   gemTex.render(tX * 16 + 8, tY * 16 + 8);
