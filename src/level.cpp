@@ -146,7 +146,7 @@ void Level::render() {
   for (int i = 0; i < lW * lH; i++) tiles[i]->render(i % lW, i / lW);
   char labelText[32];
   sprintf(labelText, ": %i/%i", gemCount, gemTarget);
-  TXL_Texture *label = TXL_RenderText(labelText, 1.0f, 1.0f, 1.0f);
+  TXL_Texture *label = TXL_RenderText(labelText, 1.0f, 1.0f, 1.0f * (gemCount < gemTarget));
   label->render(48 + label->width() / 2, 16 + label->height() / 2 + 16 * lH);
   label->free();
   delete label;
