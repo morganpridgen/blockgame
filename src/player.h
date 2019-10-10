@@ -10,6 +10,7 @@ class Player {
   private:
     int x, y, lX, lY;
     float lJX, lJY;
+    int mTU, mTD, mTL, mTR;
   public:
     bool init();
     void update(TXL_Controller&, Level&);
