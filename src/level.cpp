@@ -4,6 +4,8 @@
 #include "tile.h"
 #include "player.h"
 
+TXL_Texture floorTex, wallTex, portalTex, gemTex, boxTex;
+
 int nextInt(TXL_File *f) {
   int out = 0;
   char tmp = 0;
@@ -33,6 +35,12 @@ Level::Level() {
 }
 
 bool Level::init(const char *name, Player &ply, int lNum) {
+  if (!floorTex.load(TXL_DataPath("floor.png"), 16, 16)) return 0;
+  if (!wallTex.load(TXL_DataPath("wall.png"), 16, 16)) return 0;
+  if (!portalTex.load(TXL_DataPath("portal.png"), 64, 16)) return 0;
+  if (!gemTex.load(TXL_DataPath("gem.png"), 64, 16)) return 0;
+  if (!boxTex.load(TXL_DataPath("box.png"), 16, 16)) return 0;
+
   room = lNum;
   strcpy(levelName, name);
   if (!name) {
@@ -145,6 +153,11 @@ void Level::render() {
 }
 
 void Level::end() {
+  floorTex.free();
+  wallTex.free();
+  portalTex.free();
+  gemTex.free();
+  boxTex.free();
   for (int i = 0; i < lW * lH; i++) {
     tiles[i]->end();
     delete tiles[i];

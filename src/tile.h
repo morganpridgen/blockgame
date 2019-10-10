@@ -7,9 +7,11 @@ class Tile;
 #include "player.h"
 #include "level.h"
 
+extern TXL_Texture floorTex, wallTex, portalTex, gemTex, boxTex;
+
 class Tile {
   protected:
-    TXL_Texture tex;
+    int animTimer;
   public:
     virtual bool init() {return 1;}
     virtual Tile *update(int tX, int tY, Player &ply, Level &lvl) {return nullptr;}
@@ -25,6 +27,8 @@ class Tile {
 };
 
 class FloorTile : public Tile {
+  protected:
+    bool tSolid, lSolid, tLSolid;
   public:
     virtual bool init();
     virtual Tile *update(int, int, Player&, Level&);
@@ -71,7 +75,7 @@ class GemTile : public FloorTile {
     virtual bool isGem() {return 1;}
 };
 
-class BoxTile : public Tile {
+class BoxTile : public FloorTile {
   private:
     int bDir;
   public:
