@@ -65,9 +65,11 @@ void render() {
 
 void end() {
   TXL_UnloadFont();
-  state->end();
-  delete state;
-  state = nullptr;
+  if (state) {
+	state->end();
+    delete state;
+    state = nullptr;
+  }
   for (int i = 0; i < 4; i++) {
     if (ctrls[i]) {
       ctrls[i]->end();
