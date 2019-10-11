@@ -169,14 +169,18 @@ void Level::update(Player &ply, TXL_Controller *ctrl) {
 
 void Level::render() {
   for (int i = 0; i < lW * lH; i++) tiles[i]->render(i % lW, i / lW, cX, cY);
+  if (eX > -1 && eY > -1 && gemCount >= gemTarget) {
+    exitTex.setColorMod(0.5f);
+    exitTex.render(eX * 16 + 8 + cX, eY * 16 + 8 + cY);
+  }
   renderParticles(cX, cY);
 }
 
 void Level::renderOverlay() {
   if (eActiveFade) TXL_RenderQuad({cX, cY, lW * 16, lH * 16}, {1.0f, 0.0f, 1.0f, float(eActiveFade) / 512.0f});
   if (eX > -1 && eY > -1) {
-    exitTex.setColorMod(2.0f / 8.0f);
-    for (int i = 0; i < 8 * fmin((float(gemCount * gemCount) / float(gemTarget * gemTarget)), 1.0f); i++) exitTex.render(eX * 16 + 6 + rand() % 4 + cX, eY * 16 + 6 + rand() % 4 + cY);
+    exitTex.setColorMod(1.0f / 8.0f * (1.0f + float(gemCount >= gemTarget)));
+    for (int i = 0; i < 8 * fmin((float(gemCount) / float(gemTarget)), 1.0f); i++) exitTex.render(eX * 16 + 6 + rand() % 4 + cX, eY * 16 + 6 + rand() % 4 + cY);
   }
   char labelText[32];
   sprintf(labelText, ": %i/%i", gemCount, gemTarget);
