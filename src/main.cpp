@@ -66,7 +66,7 @@ void render() {
 void end() {
   TXL_UnloadFont();
   if (state) {
-	state->end();
+    state->end();
     delete state;
     state = nullptr;
   }
