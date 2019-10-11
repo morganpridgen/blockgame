@@ -22,8 +22,9 @@ class Level {
   public:
     Level();
     bool init(const char*, Player&, int);
-    void update(Player&);
+    void update(Player&, TXL_Controller*);
     void render();
+    void renderOverlay();
     void end();
     
     Tile *tileAt(int x, int y) {return tiles[y * lW + x];}

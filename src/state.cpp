@@ -11,7 +11,7 @@ bool PlayState::init() {
 
 GameState *PlayState::update(TXL_Controller *ctrls[4]) {
   ply.update(*ctrls[0], lvl);
-  lvl.update(ply);
+  lvl.update(ply, ctrls[0]);
   updateParticles();
   return nullptr;
 }
@@ -26,6 +26,7 @@ void PlayState::render() {
   lvl.render();
   ply.render();
   renderParticles();
+  lvl.renderOverlay();
 }
 
 void PlayState::end() {
