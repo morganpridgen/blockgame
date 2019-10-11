@@ -14,7 +14,7 @@ class Player {
   public:
     bool init();
     void update(TXL_Controller&, Level&);
-    void render();
+    void render(float, float);
     void end();
     
     void getPos(int &nX, int &nY) {nX = x, nY = y;}

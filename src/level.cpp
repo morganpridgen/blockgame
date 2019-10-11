@@ -37,6 +37,7 @@ Level::Level() {
   gemCount = 0;
   gemTarget = 0;
   eActiveFade = 0;
+  cX = 0.0f, cY = 0.0f;
 }
 
 bool Level::init(const char *name, Player &ply, int lNum) {
@@ -46,6 +47,7 @@ bool Level::init(const char *name, Player &ply, int lNum) {
   if (!gemTex.load(TXL_DataPath("gem.png"), 64, 16)) return 0;
   if (!boxTex.load(TXL_DataPath("box.png"), 16, 16)) return 0;
   if (!exitTex.load(TXL_DataPath("exit.png"), 48, 48)) return 0;
+  initParticles();
 
   eX = -1, eY = -1;
   room = lNum;
@@ -108,6 +110,7 @@ bool Level::init(const char *name, Player &ply, int lNum) {
     }
     f.close();
   }
+  cX = 320.0f - 8 * lW, cY = 180.0f - 8 * lH;
   return 1;
 }
 
@@ -156,6 +159,7 @@ void Level::update(Player &ply, TXL_Controller *ctrl) {
       addParticle(info);
     }
   }
+  updateParticles();
   
   if (portalActive != -1) {
     end();
@@ -164,24 +168,25 @@ void Level::update(Player &ply, TXL_Controller *ctrl) {
 }
 
 void Level::render() {
-  for (int i = 0; i < lW * lH; i++) tiles[i]->render(i % lW, i / lW);
+  for (int i = 0; i < lW * lH; i++) tiles[i]->render(i % lW, i / lW, cX, cY);
+  renderParticles(cX, cY);
 }
 
 void Level::renderOverlay() {
-  if (eActiveFade) TXL_RenderQuad({0, 0, lW * 16, lH * 16}, {1.0f, 0.0f, 1.0f, float(eActiveFade) / 1024.0f});
+  if (eActiveFade) TXL_RenderQuad({cX, cY, lW * 16, lH * 16}, {1.0f, 0.0f, 1.0f, float(eActiveFade) / 512.0f});
   if (eX > -1 && eY > -1) {
     exitTex.setColorMod(2.0f / 8.0f);
-    for (int i = 0; i < 8 * fmin((float(gemCount * gemCount) / float(gemTarget * gemTarget)), 1.0f); i++) exitTex.render(eX * 16 + 6 + rand() % 4, eY * 16 + 6 + rand() % 4);
+    for (int i = 0; i < 8 * fmin((float(gemCount * gemCount) / float(gemTarget * gemTarget)), 1.0f); i++) exitTex.render(eX * 16 + 6 + rand() % 4 + cX, eY * 16 + 6 + rand() % 4 + cY);
   }
   char labelText[32];
   sprintf(labelText, ": %i/%i", gemCount, gemTarget);
   TXL_Texture *label = TXL_RenderText(labelText, 1.0f, 1.0f, 1.0f * (gemCount < gemTarget));
-  label->render(48 + label->width() / 2, 16 + label->height() / 2 + 16 * lH);
+  label->render(48 + label->width() / 2, 344 - label->height() / 2);
   label->free();
   delete label;
   gemTex.setColorMod(1.0f);
   gemTex.setClip(0, 16, 0, 16);
-  gemTex.render(48 - gemTex.width() / 2, 16 + gemTex.height() / 2 + 16 * lH, 2.0f, 2.0f);
+  gemTex.render(48 - gemTex.width() / 2, 344 - gemTex.height() / 2, 2.0f, 2.0f);
 }
 
 void Level::end() {

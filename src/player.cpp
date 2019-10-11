@@ -41,9 +41,9 @@ void Player::update(TXL_Controller &ctrl, Level &lvl) {
   lJX = ctrl.leftJoyX(), lJY = ctrl.leftJoyY();
 }
 
-void Player::render() {
-  TXL_RenderQuad(x * 16 + 8, y * 16 + 8, 8, 8, {0.0f, 0.5f, 0.0f, 1.0f});
-  TXL_RenderQuad(x * 16 + 8, y * 16 + 8, 6, 6, {0.0f, 1.0f, 0.0f, 1.0f});
+void Player::render(float cX, float cY) {
+  TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 8, 8, {0.0f, 0.5f, 0.0f, 1.0f});
+  TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 6, 6, {0.0f, 1.0f, 0.0f, 1.0f});
 }
 
 void Player::end() {

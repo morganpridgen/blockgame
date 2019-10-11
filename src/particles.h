@@ -13,7 +13,7 @@ class Particle {
   public:
     void init(ParticleInfo&);
     void update();
-    void render();
+    void render(float, float);
     
     bool getActive() {return info.timer > 0;}
 };
@@ -21,6 +21,6 @@ class Particle {
 void initParticles();
 void addParticle(ParticleInfo&);
 void updateParticles();
-void renderParticles();
+void renderParticles(float, float);
 
 #endif

@@ -19,6 +19,7 @@ class Level {
     int gemCount, gemTarget;
     int eActiveFade;
     int eX, eY;
+    float cX, cY;
   public:
     Level();
     bool init(const char*, Player&, int);
@@ -30,6 +31,8 @@ class Level {
     Tile *tileAt(int x, int y) {return tiles[y * lW + x];}
     int getW() {return lW;}
     int getH() {return lH;}
+    float getCX() {return cX;}
+    float getCY() {return cY;}
 };
 
 #endif

@@ -16,8 +16,8 @@ void Particle::update() {
   info.timer--;
 }
 
-void Particle::render() {
-  if (getActive()) TXL_RenderQuad(info.x, info.y, info.s, info.s, {info.r, info.g, info.b, 1.0f});
+void Particle::render(float cX, float cY) {
+  if (getActive()) TXL_RenderQuad(info.x + cX, info.y + cY, info.s, info.s, {info.r, info.g, info.b, 1.0f});
 }
 
 Particle particles[particleCount];
@@ -40,6 +40,6 @@ void updateParticles() {
   for (int i = 0; i < particleCount; i++) particles[i].update();
 }
 
-void renderParticles() {
-  for (int i = 0; i < particleCount; i++) particles[i].render();
+void renderParticles(float cX, float cY) {
+  for (int i = 0; i < particleCount; i++) particles[i].render(cX, cY);
 }

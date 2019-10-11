@@ -15,7 +15,7 @@ class Tile {
   public:
     virtual bool init() {return 1;}
     virtual Tile *update(int tX, int tY, Player &ply, Level &lvl) {return nullptr;}
-    virtual void render(int tX, int tY) {}
+    virtual void render(int tX, int tY, float cX, float cY) {}
     virtual void end() {}
     
     virtual int getId() {return -1;}
@@ -32,7 +32,7 @@ class FloorTile : public Tile {
   public:
     virtual bool init();
     virtual Tile *update(int, int, Player&, Level&);
-    virtual void render(int, int);
+    virtual void render(int, int, float, float);
     virtual void end();
     
     virtual int getId() {return 0;}
@@ -42,7 +42,7 @@ class WallTile : public Tile {
   public:
     virtual bool init();
     virtual Tile *update(int, int, Player&, Level&);
-    virtual void render(int, int);
+    virtual void render(int, int, float, float);
     virtual void end();
     
     virtual int getId() {return 1;}
@@ -56,7 +56,7 @@ class PortalTile : public FloorTile {
   public:
     virtual bool init();
     virtual Tile *update(int, int, Player&, Level&);
-    virtual void render(int, int);
+    virtual void render(int, int, float, float);
     virtual void end();
     
     virtual int getId() {return 2;}
@@ -68,7 +68,7 @@ class GemTile : public FloorTile {
   public:
     virtual bool init();
     virtual Tile *update(int, int, Player&, Level&);
-    virtual void render(int, int);
+    virtual void render(int, int, float, float);
     virtual void end();
     
     virtual int getId() {return 3;}
@@ -81,7 +81,7 @@ class BoxTile : public FloorTile {
   public:
     virtual bool init();
     virtual Tile *update(int, int, Player&, Level&);
-    virtual void render(int, int);
+    virtual void render(int, int, float, float);
     virtual void end();
     
     virtual int getId() {return 4;}
