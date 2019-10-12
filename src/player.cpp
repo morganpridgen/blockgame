@@ -3,7 +3,6 @@
 
 bool Player::init() {
   x = 1, y = 1;
-  lJX = 0, lJY = 0;
   mTU = 0, mTD = 0, mTL = 0, mTR = 0;
   return 1;
 }
@@ -38,7 +37,6 @@ void Player::update(TXL_Controller &ctrl, Level &lvl) {
   if (x >= lvl.getW()) x = lvl.getW() - 1;
   if (y < 0) y = 0;
   if (y >= lvl.getH()) y = lvl.getH() - 1;
-  lJX = ctrl.leftJoyX(), lJY = ctrl.leftJoyY();
 }
 
 void Player::render(float cX, float cY) {

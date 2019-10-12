@@ -42,7 +42,7 @@ bool init() {
       }
     }
   }
-  state = new PlayState;
+  state = new LevelSelectState;
   if (!state->init()) return 0;
   return 1;
 }

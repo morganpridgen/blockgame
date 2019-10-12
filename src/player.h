@@ -9,7 +9,6 @@ class Player;
 class Player {
   private:
     int x, y, lX, lY;
-    float lJX, lJY;
     int mTU, mTD, mTL, mTR;
   public:
     bool init();

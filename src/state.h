@@ -23,4 +23,16 @@ class PlayState : public GameState {
     virtual void end();
 };
 
+class LevelSelectState : public GameState {
+  private:
+    char **levels;
+    int levelCount;
+    int selectedLevel;
+  public:
+    virtual bool init();
+    virtual GameState *update(TXL_Controller*[4]);
+    virtual void render();
+    virtual void end();
+};
+
 #endif
