@@ -28,6 +28,7 @@ class LevelSelectState : public GameState {
     char **levels;
     int levelCount;
     int selectedLevel;
+    float lJX;
   public:
     virtual bool init();
     virtual GameState *update(TXL_Controller*[4]);

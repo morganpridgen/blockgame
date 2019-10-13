@@ -1,9 +1,11 @@
 #include "state.h"
 #include <TEXEL/texel.h>
 
+char playingLevel[64];
+
 bool PlayState::init() {
   if (!ply.init()) return 0;
-  if (!lvl.init("test", ply, 0)) return 0;
+  if (!lvl.init(playingLevel, ply, 0)) return 0;
   return 1;
 }
 
@@ -50,23 +52,29 @@ bool LevelSelectState::init() {
     levels[i] = new char[strlen(tmpLevels[i])];
     memcpy(levels[i], tmpLevels[i], sizeof(levels[i]));
   }
+  selectedLevel = 0, lJX = 0.0f;
   return 1;
 }
 
 GameState *LevelSelectState::update(TXL_Controller *ctrls[4]) {
+  if (ctrls[0]->leftJoyX() > 0.5f && lJX <= 0.5f && selectedLevel != levelCount - 1) selectedLevel++; 
+  if (ctrls[0]->leftJoyX() < -0.5f && lJX >= -0.5f && selectedLevel != 0) selectedLevel--;
+  if (ctrls[0]->buttonPress(CtrlA)) {
+    strcpy(playingLevel, levels[selectedLevel]);
+    return new PlayState;
+  }
+  lJX = ctrls[0]->leftJoyX();
   return nullptr;
 }
 
 void LevelSelectState::render() {
-  for (int i = 0; i < levelCount; i++) {
-    TXL_Texture *lvl = TXL_RenderText(levels[i], 1.0f, 1.0f, 1.0f);
-    lvl->render(320.0f, 180.0f + 16.0f * i);
-    delete lvl;
-  }
+  TXL_Texture *label = TXL_RenderText(levels[selectedLevel], 1.0f, 1.0f, 1.0f);
+  label->render(320.0f, 180.0f);
+  delete label;
 }
 
 void LevelSelectState::end() {
-  for (int i = 0; i < levelCount; i++) delete [] levels[i];
+  for (int i = 0; i < levelCount; i++) delete [] (levels[i]);
   delete [] levels;
   levels = nullptr;
 }
