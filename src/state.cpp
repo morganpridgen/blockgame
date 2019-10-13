@@ -11,7 +11,7 @@ bool PlayState::init() {
 
 GameState *PlayState::update(TXL_Controller *ctrls[4]) {
   ply.update(*ctrls[0], lvl);
-  lvl.update(ply, ctrls[0]);
+  if (lvl.update(ply, ctrls[0])) return new LevelSelectState;
   return nullptr;
 }
 

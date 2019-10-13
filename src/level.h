@@ -23,7 +23,7 @@ class Level {
   public:
     Level();
     bool init(const char*, Player&, int);
-    void update(Player&, TXL_Controller*);
+    bool update(Player&, TXL_Controller*);
     void render();
     void renderOverlay();
     void end();

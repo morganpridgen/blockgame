@@ -114,7 +114,7 @@ bool Level::init(const char *name, Player &ply, int lNum) {
   return 1;
 }
 
-void Level::update(Player &ply, TXL_Controller *ctrl) {
+bool Level::update(Player &ply, TXL_Controller *ctrl) {
   int portalActive = -1;
   for (int i = 0; i < lW * lH; i++) {
     Tile *newTile = tiles[i]->update(i % lW, i / lW, ply, *this);
@@ -158,6 +158,9 @@ void Level::update(Player &ply, TXL_Controller *ctrl) {
       ParticleInfo info = {eX * 16 + 8 + d * cos(r), eY * 16 + 8 + d * sin(r), 0, 0, 2.0f, 15, 1.0f, 0.0f, 1.0f};
       addParticle(info);
     }
+    int pX, pY;
+    ply.getPos(pX, pY);
+    if (fabs(eX - pX) + fabs(eY - pY) < 2) return 1;
   }
   updateParticles();
   
@@ -165,6 +168,7 @@ void Level::update(Player &ply, TXL_Controller *ctrl) {
     end();
     init(levelName, ply, portalActive);
   }
+  return 0;
 }
 
 void Level::render() {
