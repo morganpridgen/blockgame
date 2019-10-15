@@ -54,6 +54,7 @@ bool Level::init(const char *name, Player &ply, int lNum) {
   eX = -1, eY = -1, gX = -1, gY = -1;
   room = lNum;
   strcpy(levelName, name);
+  reset = 1;
   if (!name) {
     lW = 16, lH = 16;
     tiles = new Tile*[lW * lH];
@@ -175,9 +176,14 @@ bool Level::update(Player &ply, TXL_Controller *ctrl) {
   }
   updateParticles();
   
+  reset = 0;
   if (portalActive != -1) {
     end();
     init(levelName, ply, portalActive);
+  }
+  if (ply.respawn()) {
+    end();
+    init(levelName, ply, room);
   }
   return 0;
 }

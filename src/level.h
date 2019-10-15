@@ -21,6 +21,7 @@ class Level {
     int eX, eY, gX, gY;
     float cX, cY;
     int gR1, gG1, gB1, gR2, gG2, gB2;
+    bool reset;
   public:
     Level();
     bool init(const char*, Player&, int);
@@ -34,6 +35,7 @@ class Level {
     int getH() {return lH;}
     float getCX() {return cX;}
     float getCY() {return cY;}
+    bool hasReset() {return reset;}
 };
 
 #endif

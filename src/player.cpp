@@ -1,15 +1,27 @@
 #include "player.h"
 #include <TEXEL/texel.h>
+#include "particles.h"
 
 bool Player::init() {
   x = 1, y = 1;
   mTU = 0, mTD = 0, mTL = 0, mTR = 0;
   dead = 0;
+  respawnTimer = 300;
   return 1;
 }
 
 void Player::update(TXL_Controller &ctrl, Level &lvl) {
-  if (dead) return;
+  if (dead) {
+    respawnTimer--;
+    if (respawnTimer == 120) {
+      for (int i = 0; i < 16; i++) {
+        ParticleInfo pInfo = {x * 16 + 8, y * 16 + 8, 2.0f * cos(float(i) / (8.0f / 3.14f)), 2.0f * sin(float(i) / (8.0f / 3.14f)), 2.0f, 60, 1.0f, 1.0f, 1.0f};
+        addParticle(pInfo);
+      }
+    }
+    return;
+  }
+  
   lX = x, lY = y;
   if (ctrl.leftJoyX() >= 0.5f && !lvl.tileAt(x + 1, y)->isSolid()) {
     if (mTR == 0) {
@@ -42,6 +54,7 @@ void Player::update(TXL_Controller &ctrl, Level &lvl) {
 }
 
 void Player::render(float cX, float cY) {
+  if (respawnTimer < 120) return;
   TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 8, 8, {0.5f * float(dead), 0.5f * float(!dead), 0.0f, 1.0f});
   TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 6, 6, {1.0f * float(dead), 1.0f * float(!dead), 0.0f, 1.0f});
 }
