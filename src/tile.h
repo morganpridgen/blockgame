@@ -7,7 +7,7 @@ class Tile;
 #include "player.h"
 #include "level.h"
 
-extern TXL_Texture floorTex, wallTex, portalTex, gemTex, boxTex;
+extern TXL_Texture floorTex, wallTex, portalTex, gemTex, boxTex, bowTex;
 
 class Tile {
   protected:
@@ -90,6 +90,20 @@ class BoxTile : public FloorTile {
     
     virtual int getId() {return 4;}
     virtual int boxDir() {return bDir;}
+};
+
+class CrossbowTile : public FloorTile {
+  private:
+    float r, tR;
+    int shotTimer;
+  public:
+    virtual bool init();
+    virtual Tile *update(int, int, Player&, Level&);
+    virtual void render(int, int, float, float);
+    virtual void end();
+    
+    virtual int getId() {return 7;}
+    virtual bool isSolid() {return 1;}
 };
 
 Tile *getTileId(int);

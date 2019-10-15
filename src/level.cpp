@@ -7,7 +7,7 @@
 #include "player.h"
 #include "particles.h"
 
-TXL_Texture floorTex, wallTex, portalTex, gemTex, boxTex;
+TXL_Texture floorTex, wallTex, portalTex, gemTex, boxTex, bowTex;
 TXL_Texture exitTex;
 
 int nextInt(TXL_File *f) {
@@ -47,6 +47,7 @@ bool Level::init(const char *name, Player &ply, int lNum) {
   if (!portalTex.load(TXL_DataPath("portal.png"), 64, 16)) return 0;
   if (!gemTex.load(TXL_DataPath("gem.png"), 64, 32)) return 0;
   if (!boxTex.load(TXL_DataPath("box.png"), 16, 16)) return 0;
+  if (!bowTex.load(TXL_DataPath("crossbow.png"), 64, 16)) return 0;
   if (!exitTex.load(TXL_DataPath("exit.png"), 48, 48)) return 0;
   initParticles();
 
@@ -188,6 +189,11 @@ void Level::render() {
     exitTex.render(eX * 16 + 8 + cX, eY * 16 + 8 + cY);
   }
   renderParticles(cX, cY);
+  if (gX > -1 && gY > -1) {
+    gemTex.setColorMod(float(gR1) / 255.0f, float(gG1) / 255.0f, float(gB1) / 255.0f, 0.75f);
+    gemTex.setClip(0, 16, 0, 16);
+    gemTex.render(gX * 16 + 8 + cX, gY * 16 + 8 + cY, 3.0f, 3.0f);
+  }
 }
 
 void Level::renderOverlay() {

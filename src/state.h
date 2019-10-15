@@ -36,4 +36,12 @@ class LevelSelectState : public GameState {
     virtual void end();
 };
 
+class WinState : public GameState {
+  public:
+    virtual bool init();
+    virtual GameState *update(TXL_Controller*[4]);
+    virtual void render();
+    virtual void end();
+};
+
 #endif

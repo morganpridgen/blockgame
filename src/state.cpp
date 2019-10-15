@@ -11,7 +11,7 @@ bool PlayState::init() {
 
 GameState *PlayState::update(TXL_Controller *ctrls[4]) {
   ply.update(*ctrls[0], lvl);
-  if (lvl.update(ply, ctrls[0])) return new LevelSelectState;
+  if (lvl.update(ply, ctrls[0])) return new WinState;
   return nullptr;
 }
 
@@ -59,7 +59,7 @@ bool LevelSelectState::init() {
 GameState *LevelSelectState::update(TXL_Controller *ctrls[4]) {
   if (ctrls[0]->leftJoyX() > 0.5f && lJX <= 0.5f && selectedLevel != levelCount - 1) selectedLevel++; 
   if (ctrls[0]->leftJoyX() < -0.5f && lJX >= -0.5f && selectedLevel != 0) selectedLevel--;
-  if (ctrls[0]->buttonPress(CtrlA)) {
+  if (ctrls[0]->buttonClick(CtrlA)) {
     strcpy(playingLevel, levels[selectedLevel]);
     return new PlayState;
   }
@@ -77,4 +77,27 @@ void LevelSelectState::end() {
   for (int i = 0; i < levelCount; i++) delete [] (levels[i]);
   delete [] levels;
   levels = nullptr;
+}
+
+
+
+bool WinState::init() {
+  return 1;
+}
+
+GameState *WinState::update(TXL_Controller *ctrls[4]) {
+  if (ctrls[0]->buttonClick(CtrlA)) return new LevelSelectState;
+  return nullptr;
+}
+
+void WinState::render() {
+  char text[64];
+  sprintf(text, "You beat %s!", playingLevel);
+  TXL_Texture *label = TXL_RenderText(text, 1.0f, 1.0f, 1.0f);
+  label->render(320.0f, 180.0f);
+  delete label;
+}
+
+void WinState::end() {
+
 }
