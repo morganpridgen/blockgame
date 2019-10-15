@@ -56,8 +56,9 @@ bool LevelSelectState::init() {
   levelCount = lvlNum + 1;
   levels = new char*[levelCount];
   for (int i = 0; i < levelCount; i++) {
-    levels[i] = new char[strlen(tmpLevels[i])];
-    memcpy(levels[i], tmpLevels[i], sizeof(levels[i]));
+    levels[i] = new char[strlen(tmpLevels[i]) + 1];
+    memcpy(levels[i], tmpLevels[i], strlen(tmpLevels[i]));
+	levels[i][strlen(tmpLevels[i])] = 0;
   }
   selectedLevel = 0, lJX = 0.0f;
   return 1;
