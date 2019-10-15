@@ -4,10 +4,12 @@
 bool Player::init() {
   x = 1, y = 1;
   mTU = 0, mTD = 0, mTL = 0, mTR = 0;
+  dead = 0;
   return 1;
 }
 
 void Player::update(TXL_Controller &ctrl, Level &lvl) {
+  if (dead) return;
   lX = x, lY = y;
   if (ctrl.leftJoyX() >= 0.5f && !lvl.tileAt(x + 1, y)->isSolid()) {
     if (mTR == 0) {
@@ -40,8 +42,8 @@ void Player::update(TXL_Controller &ctrl, Level &lvl) {
 }
 
 void Player::render(float cX, float cY) {
-  TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 8, 8, {0.0f, 0.5f, 0.0f, 1.0f});
-  TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 6, 6, {0.0f, 1.0f, 0.0f, 1.0f});
+  TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 8, 8, {0.5f * float(dead), 0.5f * float(!dead), 0.0f, 1.0f});
+  TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 6, 6, {1.0f * float(dead), 1.0f * float(!dead), 0.0f, 1.0f});
 }
 
 void Player::end() {

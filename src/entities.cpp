@@ -17,6 +17,16 @@ void Arrow::update(Level &lvl, Player &ply) {
   info.x += 2.0f * cos(info.r);
   info.y += 2.0f * sin(info.r);
   if (lvl.tileAt(info.x / 16, info.y / 16)->isSolid()) active = 0; 
+  
+  if (ply.isDead()) return;
+  int pTX, pTY;
+  float pX, pY;
+  ply.getPos(pTX, pTY);
+  pX = pTX * 16 + 8, pY = pTY * 16 + 8;
+  if ((pX - info.x) * (pX - info.x) + (pY - info.y) * (pY - info.y) < 144) {
+    active = 0;
+    ply.kill();
+  }
 }
 
 void Arrow::render(TXL_Texture &tex, float cX, float cY) {
