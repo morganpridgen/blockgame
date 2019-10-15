@@ -12,6 +12,7 @@ class Player {
     int mTU, mTD, mTL, mTR;
     bool dead;
     int respawnTimer;
+    TXL_Texture tex;
   public:
     bool init();
     void update(TXL_Controller&, Level&);
@@ -23,7 +24,7 @@ class Player {
     void getLPos(int &nX, int &nY) {nX = lX, nY = lY;}
     bool isDead() {return dead;}
     void kill() {dead = 1;}
-    void revive() {dead = 0, respawnTimer = 300;}
+    void revive() {dead = 0, respawnTimer = 120;}
     bool respawn() {return !respawnTimer;}
 };
 

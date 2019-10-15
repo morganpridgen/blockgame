@@ -178,13 +178,14 @@ Tile *CrossbowTile::update(int tX, int tY, Player &ply, Level &lvl) {
   FloorTile::update(tX, tY, ply, lvl);
   int pX, pY;
   ply.getPos(pX, pY);
-  if (fabs(pX - tX) > fabs(pY - tY)) {
+  /*if (fabs(pX - tX) > fabs(pY - tY)) {
     if (pX > tX) tR = 0;
     if (pX < tX) tR = 3.14f;
   } else {
     if (pY > tY) tR = 1.57f;
     if (pY < tY) tR = 4.71;
-  }
+  }*/
+  tR= atan2(pY - tY, pX - tX);
   float rVel = (tR - r + (6.28f * (pY < tY)));
   rVel += 6.28f * (rVel < -3.14f);
   rVel -= 6.28f * (rVel > 3.14f);
@@ -202,8 +203,8 @@ Tile *CrossbowTile::update(int tX, int tY, Player &ply, Level &lvl) {
 
 void CrossbowTile::render(int tX, int tY, float cX, float cY) {
   FloorTile::render(tX, tY, cX, cY);
-  if (shotTimer < 60) bowTex.setClip(32, 48, 0, 16);
-  else if (shotTimer < 90) bowTex.setClip(16, 32, 0, 16);
+  if (shotTimer < 30) bowTex.setClip(32, 48, 0, 16);
+  else if (shotTimer < 60) bowTex.setClip(16, 32, 0, 16);
   else bowTex.setClip(0, 16, 0, 16);
   bowTex.render(tX * 16 + 8 + cX, tY * 16 + 8 + cY, r * (180.0f / 3.14f));
 }

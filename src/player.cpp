@@ -6,14 +6,15 @@ bool Player::init() {
   x = 1, y = 1;
   mTU = 0, mTD = 0, mTL = 0, mTR = 0;
   dead = 0;
-  respawnTimer = 300;
+  respawnTimer = 120;
+  if (!tex.load(TXL_DataPath("player.png"), 16, 16)) return 0;
   return 1;
 }
 
 void Player::update(TXL_Controller &ctrl, Level &lvl) {
   if (dead) {
     respawnTimer--;
-    if (respawnTimer == 120) {
+    if (respawnTimer == 60) {
       for (int i = 0; i < 16; i++) {
         ParticleInfo pInfo = {x * 16 + 8, y * 16 + 8, 2.0f * cos(float(i) / (8.0f / 3.14f)), 2.0f * sin(float(i) / (8.0f / 3.14f)), 2.0f, 60, 1.0f, 1.0f, 1.0f};
         addParticle(pInfo);
@@ -54,11 +55,12 @@ void Player::update(TXL_Controller &ctrl, Level &lvl) {
 }
 
 void Player::render(float cX, float cY) {
-  if (respawnTimer < 120) return;
-  TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 8, 8, {0.5f * float(dead), 0.5f * float(!dead), 0.0f, 1.0f});
-  TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 6, 6, {1.0f * float(dead), 1.0f * float(!dead), 0.0f, 1.0f});
+  if (respawnTimer < 60) return;
+  /*TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 8, 8, {0.5f * float(dead), 0.5f * float(!dead), 0.0f, 1.0f});
+  TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 6, 6, {1.0f * float(dead), 1.0f * float(!dead), 0.0f, 1.0f});*/
+  tex.render(x * 16 + 8 + cX, y * 16 + 8 + cY);
 }
 
 void Player::end() {
-
+  tex.free();
 }

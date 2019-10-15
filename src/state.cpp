@@ -1,4 +1,5 @@
 #include "state.h"
+#include <cstring>
 #include <TEXEL/texel.h>
 #include "entities.h"
 
