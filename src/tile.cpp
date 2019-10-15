@@ -4,6 +4,7 @@
 #include <TEXEL/texel.h>
 #include "player.h"
 #include "particles.h"
+#include "entities.h"
 
 bool FloorTile::init() {
   return 1;
@@ -11,8 +12,8 @@ bool FloorTile::init() {
 
 Tile *FloorTile::update(int tX, int tY, Player &ply, Level &lvl) {
   tSolid = lvl.tileAt(tX, tY - 1)->isSolid() && lvl.tileAt(tX, tY - 1)->getId() != 7;
-  lSolid = lvl.tileAt(tX - 1, tY)->isSolid() && lvl.tileAt(tX, tY - 1)->getId() != 7;
-  tLSolid = lvl.tileAt(tX - 1, tY - 1)->isSolid() && lvl.tileAt(tX, tY - 1)->getId() != 7;
+  lSolid = lvl.tileAt(tX - 1, tY)->isSolid() && lvl.tileAt(tX - 1, tY)->getId() != 7;
+  tLSolid = lvl.tileAt(tX - 1, tY - 1)->isSolid() && lvl.tileAt(tX - 1, tY - 1)->getId() != 7;
   return nullptr;
 }
 
@@ -24,6 +25,7 @@ void FloorTile::render(int tX, int tY, float cX, float cY) {
 }
 
 void FloorTile::end() {
+
 }
 
 
@@ -191,6 +193,8 @@ Tile *CrossbowTile::update(int tX, int tY, Player &ply, Level &lvl) {
   
   if (shotTimer == 0) {
     shotTimer = 240;
+    ArrowInfo info = {(tX + cos(tR)) * 16 + 8, (tY + sin(tR)) * 16 + 8, tR};
+    addArrow(info);
   }
   shotTimer--;
   return nullptr;

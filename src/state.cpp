@@ -1,29 +1,34 @@
 #include "state.h"
 #include <TEXEL/texel.h>
+#include "entities.h"
 
 char playingLevel[64];
 
 bool PlayState::init() {
   if (!ply.init()) return 0;
   if (!lvl.init(playingLevel, ply, 0)) return 0;
+  if (!initArrows()) return 0;
   return 1;
 }
 
 GameState *PlayState::update(TXL_Controller *ctrls[4]) {
   ply.update(*ctrls[0], lvl);
   if (lvl.update(ply, ctrls[0])) return new WinState;
+  updateArrows(lvl, ply);
   return nullptr;
 }
 
 void PlayState::render() {
   lvl.render();
   ply.render(lvl.getCX(), lvl.getCY());
+  renderArrows(lvl.getCX(), lvl.getCY());
   lvl.renderOverlay();
 }
 
 void PlayState::end() {
   lvl.end();
   ply.end();
+  endArrows();
 }
 
 
