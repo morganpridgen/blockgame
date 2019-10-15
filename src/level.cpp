@@ -38,18 +38,19 @@ Level::Level() {
   gemTarget = 0;
   eActiveFade = 0;
   cX = 0.0f, cY = 0.0f;
+  gR1 = 127, gG1 = 127, gB1 = 195, gR2 = 255, gG2 = 255, gB2 = 255;
 }
 
 bool Level::init(const char *name, Player &ply, int lNum) {
   if (!floorTex.load(TXL_DataPath("floor.png"), 16, 16)) return 0;
   if (!wallTex.load(TXL_DataPath("wall.png"), 16, 16)) return 0;
   if (!portalTex.load(TXL_DataPath("portal.png"), 64, 16)) return 0;
-  if (!gemTex.load(TXL_DataPath("gem.png"), 64, 16)) return 0;
+  if (!gemTex.load(TXL_DataPath("gem.png"), 64, 32)) return 0;
   if (!boxTex.load(TXL_DataPath("box.png"), 16, 16)) return 0;
   if (!exitTex.load(TXL_DataPath("exit.png"), 48, 48)) return 0;
   initParticles();
 
-  eX = -1, eY = -1;
+  eX = -1, eY = -1, gX = -1, gY = -1;
   room = lNum;
   strcpy(levelName, name);
   if (!name) {
@@ -69,6 +70,10 @@ bool Level::init(const char *name, Player &ply, int lNum) {
     sprintf(path, "%s/%s/targetGems.txt", TXL_DataPath("levels"), name);
     if (!f.init(path, 'r')) return 0;
     gemTarget = nextInt(&f);
+    f.close();
+    sprintf(path, "%s/%s/gemColor.txt", TXL_DataPath("levels"), name);
+    if (!f.init(path, 'r')) return 0;
+    gR1 = nextInt(&f), gG1 = nextInt(&f), gB1 = nextInt(&f), gR2 = nextInt(&f), gG2 = nextInt(&f), gB2 = nextInt(&f);
     f.close();
     sprintf(path, "%s/%s/%i.txt", TXL_DataPath("levels"), name, lNum);
     if (!f.init(path, 'r')) return 0;
@@ -100,8 +105,13 @@ bool Level::init(const char *name, Player &ply, int lNum) {
         eX = i % lW, eY = i / lW;
         id = 0;
       }
+      if (id == 6) {
+        gX = i % lW, gY = i / lW;
+        id = 0;
+      }
       tiles[i] = getTileId(id);
       if (!tiles[i] || !tiles[i]->init()) return 0;
+      if (id == 3) tiles[i]->gemColor(gR1, gG1, gB1, gR2, gG2, gB2);
     }
     for (int i = 0; i < 8; i++) {
       if (portals[i] != -1) {
@@ -160,7 +170,7 @@ bool Level::update(Player &ply, TXL_Controller *ctrl) {
     }
     int pX, pY;
     ply.getPos(pX, pY);
-    if (fabs(eX - pX) + fabs(eY - pY) < 2) return 1;
+    if (gemCount >= gemTarget && fabs(eX - pX) + fabs(eY - pY) < 2) return 1;
   }
   updateParticles();
   
@@ -189,10 +199,10 @@ void Level::renderOverlay() {
   char labelText[32];
   sprintf(labelText, ": %i/%i", gemCount, gemTarget);
   TXL_Texture *label = TXL_RenderText(labelText, 1.0f, 1.0f, 1.0f * (gemCount < gemTarget));
-  label->render(48 + label->width() / 2, 344 - label->height() / 2);
+  label->render(48 + label->width() / 2, 344 - gemTex.height() / 2);
   label->free();
   delete label;
-  gemTex.setColorMod(1.0f);
+  gemTex.setColorMod(float(gR1) / 255.0f, float(gG1) / 255.0f, float(gB1) / 255.0f, 1.0f);
   gemTex.setClip(0, 16, 0, 16);
   gemTex.render(48 - gemTex.width() / 2, 344 - gemTex.height() / 2, 2.0f, 2.0f);
 }

@@ -24,6 +24,7 @@ class Tile {
     virtual void setPortalDest(int dest) {;}
     virtual bool isGem() {return 0;}
     virtual int boxDir() {return -1;}
+    virtual void gemColor(int nR1, int nG1, int nB1, int nR2, int nG2, int nB2) {}
 };
 
 class FloorTile : public Tile {
@@ -65,6 +66,8 @@ class PortalTile : public FloorTile {
 };
 
 class GemTile : public FloorTile {
+  private:
+    int r1, g1, b1, r2, g2, b2;
   public:
     virtual bool init();
     virtual Tile *update(int, int, Player&, Level&);
@@ -73,6 +76,7 @@ class GemTile : public FloorTile {
     
     virtual int getId() {return 3;}
     virtual bool isGem() {return 1;}
+    virtual void gemColor(int nR1, int nG1, int nB1, int nR2, int nG2, int nB2) {r1 = nR1, g1 = nG1, b1 = nB1, r2 = nR2, g2 = nG2, b2 = nB2;}
 };
 
 class BoxTile : public FloorTile {

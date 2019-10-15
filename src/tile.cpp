@@ -84,6 +84,7 @@ void PortalTile::end() {
 
 
 bool GemTile::init() {
+  r1 = 127, g1 = 127, b1 = 195, r2 = 255, g2 = 255, b2 = 255;
   animTimer = 0;
   return 1;
 }
@@ -98,7 +99,7 @@ Tile *GemTile::update(int tX, int tY, Player &ply, Level &lvl) {
     return new FloorTile;
   }
   if (animTimer % 8 == 0 && ((animTimer / 8) + tX + tY) % 8 == 5) {
-    ParticleInfo info = {tX * 16 + 4, tY * 16 + 4, 0, 0, 1, 15, 0.75f, 0.5f, 0.0f};
+    ParticleInfo info = {tX * 16 + 4, tY * 16 + 4, 0, 0, 1, 15, float(r2) / 255.0f, float(g2) / 255.0f, float(b2) / 255.0f};
     for (int i = 0; i < 8; i++) {
       info.xV = cos(float(i) * (6.28f / 8.0f));
       info.yV = sin(float(i) * (6.28f / 8.0f));
@@ -112,7 +113,10 @@ void GemTile::render(int tX, int tY, float cX, float cY) {
   FloorTile::render(tX, tY, cX, cY);
   int offset = (((animTimer / 8) + tX + tY) % 8 < 4) ? 0 : ((animTimer / 8) + tX + tY) % 4;
   gemTex.setClip(offset * 16, (offset + 1) * 16, 0, 16);
-  gemTex.setColorMod(0.95f);
+  gemTex.setColorMod(float(r1) / 255.0f, float(g1) / 255.0f, float(b1) / 255.0f, 0.95f);
+  gemTex.render(tX * 16 + 8 + cX, tY * 16 + 8 + cY);
+  gemTex.setClip(offset * 16, (offset + 1) * 16, 16, 32);
+  gemTex.setColorMod(float(r2) / 255.0f, float(g2) / 255.0f, float(b2) / 255.0f, 0.95f);
   gemTex.render(tX * 16 + 8 + cX, tY * 16 + 8 + cY);
   animTimer++;
 }
