@@ -16,7 +16,7 @@ Arrow::Arrow() {
 void Arrow::update(Level &lvl, Player &ply) {
   info.x += 2.0f * cos(info.r);
   info.y += 2.0f * sin(info.r);
-  if (lvl.tileAt(info.x / 16, info.y / 16)->isSolid()) active = 0; 
+  if (lvl.tileAt(info.x / 16, info.y / 16)->isSolid() || lvl.tileAt(info.x / 16, info.y / 16)->getId() == 4) active = 0; 
   
   if (ply.isDead()) return;
   int pTX, pTY;
