@@ -52,13 +52,22 @@ void Player::update(TXL_Controller &ctrl, Level &lvl) {
   if (x >= lvl.getW()) x = lvl.getW() - 1;
   if (y < 0) y = 0;
   if (y >= lvl.getH()) y = lvl.getH() - 1;
+  
+  float tVX = x * 16 + 8, tVY = y * 16 + 8;
+  if (vXV < (tVX - vX) / 2.0f) vXV++;
+  if (vXV > (tVX - vX) / 2.0f) vXV--;
+  if (vYV < (tVY - vY) / 2.0f) vYV++;
+  if (vYV > (tVY - vY) / 2.0f) vYV--;
+  vX += vXV;
+  vY += vYV;
 }
 
 void Player::render(float cX, float cY) {
   if (respawnTimer < 60) return;
   /*TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 8, 8, {0.5f * float(dead), 0.5f * float(!dead), 0.0f, 1.0f});
   TXL_RenderQuad(x * 16 + 8 + cX, y * 16 + 8 + cY, 6, 6, {1.0f * float(dead), 1.0f * float(!dead), 0.0f, 1.0f});*/
-  tex.render(x * 16 + 8 + cX, y * 16 + 8 + cY);
+  //tex.render(x * 16 + 8 + cX, y * 16 + 8 + cY);
+  tex.render(vX + cX, vY + cY);
 }
 
 void Player::end() {

@@ -13,6 +13,7 @@ class Player {
     bool dead;
     int respawnTimer;
     TXL_Texture tex;
+    float vX, vY, vXV, vYV;
   public:
     bool init();
     void update(TXL_Controller&, Level&);
@@ -20,7 +21,7 @@ class Player {
     void end();
     
     void getPos(int &nX, int &nY) {nX = x, nY = y;}
-    void setPos(int nX, int nY) {x = nX, y = nY;}
+    void setPos(int nX, int nY) {x = nX, y = nY; vX = nX * 16 + 8, vY = nY * 16 + 8;}
     void getLPos(int &nX, int &nY) {nX = lX, nY = lY;}
     bool isDead() {return dead;}
     void kill() {dead = 1;}
